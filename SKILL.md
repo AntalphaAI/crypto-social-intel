@@ -12,7 +12,7 @@ Social intelligence layer for crypto tokens. Powered by Santiment GraphQL API + 
 **5 Tools:**
 - `crypto-social-trending` — Top tokens by social volume
 - `crypto-sentiment-score` — Sentiment score for a specific token
-- `crypto-kol-signals` — Social dominance anomaly (KOL proxy)
+- `crypto-kol-signals` — Social dominance anomaly (KOL proxy, v1.0: social dominance as proxy, not real Twitter KOL data)
 - `crypto-mention-surge` — Detect abnormal mention spikes
 - `crypto-fear-greed` — Fear & Greed Index (real-time, free)
 
@@ -21,6 +21,8 @@ Social intelligence layer for crypto tokens. Powered by Santiment GraphQL API + 
 ```
 https://mcp-skills.ai.antalpha.com/mcp
 ```
+
+> **Environment switching:** For local dev/test, replace with `http://localhost:3000/mcp`.
 
 Protocol: MCP Streamable HTTP (JSON-RPC over HTTP with `mcp-session-id` header).
 
@@ -185,6 +187,8 @@ Get the Crypto Fear & Greed Index. **Real-time, no API key required.**
 | MEDIUM | sentiment≥50 + surge≥2x, OR Fear | 🟡 |
 | LOW | otherwise | 🟢 |
 
+> **Note:** `crypto-kol-signals` signal_level is based on `dominance_change` (independent of the sentiment+surge rule above). Extreme dominance change (>50% or <-50%) → HIGH; moderate change → MEDIUM; otherwise LOW.
+
 ## Workflow
 
 ### Check Market Sentiment (most common)
@@ -249,15 +253,19 @@ SOL: 当前3000 vs 均值400 → 7.5x ↑ 🔴 HIGH (bullish)
 1. Call `crypto-fear-greed` first (real-time, fast)
 2. Optionally call `crypto-social-trending` for top tokens
 3. Present combined view
+4. **When Santiment data is involved, always append:** `⚠️ 社交数据来自 Santiment 免费层，存在约 35 天延迟，仅供参考。`
 
 ### On "BTC情绪" / "SOL sentiment" / specific token
 1. Call `crypto-sentiment-score { symbol }`
 2. If signal_level is HIGH or MEDIUM, also call `crypto-kol-signals`
 3. Present score + trend + signal
+4. **Always append disclaimer:** `⚠️ 数据来自 Santiment 免费层，存在约 35 天延迟，仅供参考，勿作实时决策依据。`
+5. **For kol-signals output, always note:** `注：v1.0 KOL 信号以社交主导度代理，非真实 Twitter KOL 数据，v2.0 将接入 Twitter API。`
 
 ### On "哪些币在暴涨社交" / "mention surge" / "异常热度"
 1. Call `crypto-mention-surge { threshold: 2.0 }`
 2. For HIGH signal items, offer to do deeper analysis
+3. **Always append disclaimer:** `⚠️ 数据来自 Santiment 免费层，存在约 35 天延迟，仅供参考。`
 
 ### On "恐惧贪婪" / "fear greed" / "市场贪婪指数"
 1. Directly call `crypto-fear-greed`

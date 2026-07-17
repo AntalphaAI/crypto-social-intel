@@ -131,9 +131,9 @@ Detect tokens with large AltRank jumps — sudden spikes in social mentions that
 ## Data Source
 
 - **Social analytics** — social trending (AltRank), Galaxy Score, sentiment, and KOL creator signals sourced from social-media intelligence providers (LunarCrush / Santiment-class social metrics).
-- **Fear & Greed index** — overall market Fear & Greed data is provided by [alternative.me] and is exposed through the separate `data-sentiment-fng` tool (web3-data skill), not by this skill.
+- **Fear & Greed index** — overall market Fear & Greed data is provided by [alternative.me] and is exposed through the separate `data-sentiment` tool (web3-data skill), not by this skill.
 
-> Note: For the market Fear & Greed index (and its 30-day history), use `data-sentiment-fng` from the web3-data skill. This skill focuses on per-token and market-wide social signals.
+> Note: For the market Fear & Greed index (and its 30-day history), use `data-sentiment` from the web3-data skill. This skill focuses on per-token and market-wide social signals.
 
 ## Changelog
 
